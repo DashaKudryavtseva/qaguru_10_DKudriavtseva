@@ -1,14 +1,10 @@
-from selene import browser, have, command
-from qaguru_10_DK import resource
+from selene import browser, have
+from qaguru_10_DK.registration_page import RegistrationPage
 
 
 def test_fill(browser_configuration):
-    browser.open("https://demoqa.com/automation-practice-form")
-
-    browser.all("[id^=google_ads][id$=container__]").with_(timeout=10).wait_until(
-        have.size_greater_than_or_equal(3)
-    )
-    browser.all("[id^=google_ads][id$=container__]").perform(command.js.remove)
+    registration_page = RegistrationPage()
+    registration_page.open()
     """
     # if we are sure that there will be >= 3 ads
     browser.all('[id^=google_ads][id$=container__]').with_(timeout=10).should(
@@ -16,51 +12,38 @@ def test_fill(browser_configuration):
     ).perform(command.js.remove)
     """
 
-    # заполнение полей
-    browser.element("#firstName").type("Maria").press_enter()
-    browser.element("#lastName").type("Ivanova").press_enter()
+    # WHEN
+    registration_page.fill_first_name('Maria')
+    registration_page.fill_last_name('Ivanova')
+    registration_page.fill_user_email('examplemail@mail.com')
 
-    browser.element("#userEmail").type("examplemail@mail.com").press_enter()
-    browser.all("[for^=gender-radio]").element_by(have.text("Female")).click()
-    browser.element("#userNumber").type("8987654321")
+    registration_page.choose_gender('Female')
+    registration_page.fill_user_number('8987654321')
 
-    browser.element("#dateOfBirthInput").click()
-    browser.element(".react-datepicker__month-select").send_keys("January")
-    browser.element(".react-datepicker__year-select").send_keys("1996")
-    browser.element(f'.react-datepicker__day--0{"01"}').click()
+    registration_page.fill_date_of_birth('1996', 'January', '01')
 
-    browser.element("#subjectsInput").set_value("English").press_enter()
+    registration_page.fill_subjects('English', 'Chemistry')
+    registration_page.choose_hobbies('Sports', 'Reading')
 
-    browser.all(".custom-checkbox").element_by(have.exact_text("Sports")).click()
+    registration_page.upload_picture('example.png')
 
-    browser.element("#uploadPicture").set_value(resource.path('example.png'))
+    registration_page.fill_address('Sport Street, 140')
 
-    browser.element("#currentAddress").type("Sport Street, 140").press_enter()
+    registration_page.choose_state('NCR')
+    registration_page.choose_city('Delhi')
 
-    browser.element("#state").perform(command.js.scroll_into_view)
-    browser.element("#state").click()
-    browser.all("[id^=react-select][id*=option]").element_by(have.text("NCR")).click()
+    registration_page.submit_form()
 
-    browser.element("#city").click()
-    browser.all("[id^=react-select][id*=option]").element_by(have.text("Delhi")).click()
-
-    # browser.driver.execute_script("$('footer').hide()")
-    browser.element("#submit").perform(command.js.scroll_into_view)
-    # browser.driver.execute_script("document.body.style.zoom='60%'")
-    browser.element("#submit").click()
-
-    # сверка данных
-    browser.element(".table").all("td").even.should(
-        have.texts(
-            "Maria Ivanova",
-            "examplemail@mail.com",
-            "Female",
-            "8987654321",
-            "01 January,1996",
-            "English",
-            "Sports",
-            "example.png",
-            "Sport Street, 140",
-            "NCR Delhi",
-        )
+    # THEN
+    registration_page.should_have_register_info(
+        "Maria Ivanova",
+        "examplemail@mail.com",
+        "Female",
+        "8987654321",
+        "01 January,1996",
+        "English, Chemistry",
+        "Sports, Reading",
+        "example.png",
+        "Sport Street, 140",
+        "NCR Delhi",
     )
