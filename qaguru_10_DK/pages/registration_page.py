@@ -8,9 +8,7 @@ class RegistrationPage:
         self.google_adds = browser.all("[id^=google_ads][id$=container__]")
         self.submit = browser.element("#submit")
 
-    def open(self):
-        browser.open("https://demoqa.com/automation-practice-form")
-
+    def take_out_ads(self):
         self.google_adds.with_(timeout=10).wait_until(
             have.size_greater_than_or_equal(3)
         )
