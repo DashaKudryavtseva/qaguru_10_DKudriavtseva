@@ -1,16 +1,9 @@
-from selene import browser, have
-from qaguru_10_DK.registration_page import RegistrationPage
+from qaguru_10_DK.pages.registration_page import RegistrationPage
 
 
 def test_fill(browser_configuration):
     registration_page = RegistrationPage()
     registration_page.open()
-    """
-    # if we are sure that there will be >= 3 ads
-    browser.all('[id^=google_ads][id$=container__]').with_(timeout=10).should(
-        have.size_greater_than_or_equal(3)
-    ).perform(command.js.remove)
-    """
 
     # WHEN
     registration_page.fill_first_name('Maria')
