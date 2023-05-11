@@ -1,3 +1,5 @@
+from selene import browser
+
 from qaguru_10_DK.data.users import User
 from qaguru_10_DK.registration_page import RegistrationPage
 
@@ -20,7 +22,8 @@ def test_fill():
         'Delhi',
     )
     registration_page = RegistrationPage()
-    registration_page.open()
+    browser.open("/automation-practice-form")
+    registration_page.take_out_ads()
 
     # WHEN
     registration_page.register(user)
