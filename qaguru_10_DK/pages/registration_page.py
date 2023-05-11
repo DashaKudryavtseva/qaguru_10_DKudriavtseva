@@ -1,18 +1,20 @@
 from pathlib import Path
-
 from selene import browser, have, command
-
 import tests
 
 
 class RegistrationPage:
+    def __init__(self):
+        self.google_adds = browser.all("[id^=google_ads][id$=container__]")
+        self.submit = browser.element("#submit")
+
     def open(self):
         browser.open("https://demoqa.com/automation-practice-form")
 
-        browser.all("[id^=google_ads][id$=container__]").with_(timeout=10).wait_until(
+        self.google_adds.with_(timeout=10).wait_until(
             have.size_greater_than_or_equal(3)
         )
-        browser.all("[id^=google_ads][id$=container__]").perform(command.js.remove)
+        self.google_adds.perform(command.js.remove)
 
     def fill_first_name(self, value):
         browser.element("#firstName").type(value).press_enter()
@@ -69,10 +71,8 @@ class RegistrationPage:
         ).click()
 
     def submit_form(self):
-        # browser.driver.execute_script("$('footer').hide()")
-        browser.element("#submit").perform(command.js.scroll_into_view)
-        # browser.driver.execute_script("document.body.style.zoom='60%'")
-        browser.element("#submit").click()
+        self.submit.perform(command.js.scroll_into_view)
+        self.submit.click()
 
     def should_have_register_info(
         self,
