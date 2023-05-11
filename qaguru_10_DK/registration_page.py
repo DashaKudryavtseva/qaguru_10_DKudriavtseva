@@ -92,33 +92,6 @@ class RegistrationPage:
         self.submit.perform(command.js.scroll_into_view)
         self.submit.click()
 
-    # def should_have_register_info(
-    #     self,
-    #     user_name,
-    #     email,
-    #     gender,
-    #     telephone_number,
-    #     date_of_birth,
-    #     subjects,
-    #     hobbies,
-    #     picture,
-    #     address,
-    #     state_city,
-    # ):
-    #     browser.element(".table").all("td").even.should(
-    #         have.texts(
-    #             user_name,
-    #             email,
-    #             gender,
-    #             telephone_number,
-    #             date_of_birth,
-    #             subjects,
-    #             hobbies,
-    #             picture,
-    #             address,
-    #             state_city,
-    #         )
-    #     )
     def should_have_register_info(self, user: User):
         browser.element(".table").all("td").even.should(
             have.texts(
